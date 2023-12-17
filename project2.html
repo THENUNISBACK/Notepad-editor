@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  
+    <title>Editor in javascript</title>
+    <link rel="stylesheet" href="./style.css"/>
+    <script>
+        let fileHandle;
+        const openFile=async ()=>{
+          try {
+            [fileHandle]= await window.showOpenFilePicker();
+            const file=  await fileHandle.getFile();
+            const data=await file.text();
+            console.log(data);
+            contents.value=data;
+            
+          } catch (error) {
+            console.log(error.name);
+          }
+        }
+        const saveFile = async (content)=>{
+           try { 
+            const handle=await window.showSaveFilePicker({
+                types:[
+                    {
+                        accept:{
+                            'text/plain':['.text'],
+                            'text/html':['.html']
+                        },
+                    },
+                ],
+            });
+             const writable= await handle.createWritable();
+             await writable.write(content);
+             await writable.close();
+            } catch (error) {
+            console.log(error.name)
+            
+           }
+        }
+    </script>
+</head>
+<body>
+   
+     <textarea name="contents" id="contents" cols="150" rows="40"   autofocus placeholder="write a text for content"></textarea><br> 
+       <button onclick="openFile()">OPEN </button>
+       <button  onclick="saveFile(contents.value)">SAVE </button>
+       <button  onclick="contents.value=''">CLEAR ALL </button>
+   
+    
+</body>
+</html>
